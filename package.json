@@ -3,7 +3,7 @@
   "displayName": "AI Prompt History Logger",
   "description": "Automatically logs prompts sent to AI assistants to a local project file with rich editor metadata and manages .gitignore.",
   "version": "1.0.0",
-  "publisher": "armankhan",
+  "publisher": "itsArmanKhan",
   "author": {
     "name": "Arman Khan",
     "url": "https://www.themesbd.shop"
@@ -12,7 +12,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/armankhan/ai-prompt-history-logger"
+    "url": "https://github.com/itsArmanKhan/ai-prompt-history-logger"
   },
   "bugs": {
     "url": "https://www.themesbd.shop"
