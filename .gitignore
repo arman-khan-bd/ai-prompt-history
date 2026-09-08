@@ -1,0 +1,9 @@
+node_modules
+dist
+out
+*.vsix
+.DS_Store
+*.log
+.prompt-history.json
+.prompt-history.json.corrupt.*
+.ai/

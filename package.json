@@ -1,0 +1,214 @@
+{
+  "name": "ai-prompt-history-logger",
+  "displayName": "AI Prompt History Logger",
+  "description": "Automatically logs prompts sent to AI assistants to a local project file with rich editor metadata and manages .gitignore.",
+  "version": "1.0.0",
+  "publisher": "armankhan",
+  "author": {
+    "name": "Arman Khan",
+    "url": "https://www.themesbd.shop"
+  },
+  "homepage": "https://www.themesbd.shop",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/armankhan/ai-prompt-history-logger"
+  },
+  "bugs": {
+    "url": "https://www.themesbd.shop"
+  },
+  "icon": "resources/icon.png",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "AI",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "prompts",
+    "history",
+    "logger",
+    "chat",
+    "gitignore",
+    "copilot",
+    "claude",
+    "chatgpt"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "aiPromptLogger.openHistoryWebview",
+        "title": "AI Prompt Logger: Open Prompt History Dashboard",
+        "icon": "$(history)",
+        "category": "AI Prompt Logger"
+      },
+      {
+        "command": "aiPromptLogger.logPrompt",
+        "title": "AI Prompt Logger: Quick Log AI Prompt",
+        "icon": "$(comment-discussion)",
+        "category": "AI Prompt Logger"
+      },
+      {
+        "command": "aiPromptLogger.openLogFile",
+        "title": "AI Prompt Logger: Open Log File in Editor",
+        "icon": "$(json)",
+        "category": "AI Prompt Logger"
+      },
+      {
+        "command": "aiPromptLogger.clearHistory",
+        "title": "AI Prompt Logger: Clear Prompt History",
+        "icon": "$(trash)",
+        "category": "AI Prompt Logger"
+      },
+      {
+        "command": "aiPromptLogger.exportHistory",
+        "title": "AI Prompt Logger: Export Prompt History...",
+        "icon": "$(export)",
+        "category": "AI Prompt Logger"
+      },
+      {
+        "command": "aiPromptLogger.refreshHistory",
+        "title": "AI Prompt Logger: Refresh History",
+        "icon": "$(refresh)",
+        "category": "AI Prompt Logger"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ai-prompt-logger-container",
+          "title": "AI Prompt History",
+          "icon": "$(history)"
+        }
+      ]
+    },
+    "views": {
+      "ai-prompt-logger-container": [
+        {
+          "type": "webview",
+          "id": "aiPromptLogger.historySidebarView",
+          "name": "Prompt History"
+        }
+      ]
+    },
+    "chatParticipants": [
+      {
+        "id": "ai-prompt-logger.participant",
+        "name": "history",
+        "fullName": "AI Prompt History Logger",
+        "description": "Logs all prompts sent to AI with rich workspace metadata and passes them to your language model.",
+        "isSticky": false,
+        "commands": [
+          {
+            "name": "log",
+            "description": "Log a custom prompt note with current editor metadata"
+          },
+          {
+            "name": "history",
+            "description": "View recent prompt history directly in chat"
+          },
+          {
+            "name": "stats",
+            "description": "Display prompt logging statistics in chat"
+          }
+        ]
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "aiPromptLogger.openHistoryWebview",
+          "when": "view == aiPromptLogger.historySidebarView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "aiPromptLogger.logPrompt",
+          "when": "view == aiPromptLogger.historySidebarView",
+          "group": "navigation@2"
+        },
+        {
+          "command": "aiPromptLogger.refreshHistory",
+          "when": "view == aiPromptLogger.historySidebarView",
+          "group": "navigation@3"
+        },
+        {
+          "command": "aiPromptLogger.exportHistory",
+          "when": "view == aiPromptLogger.historySidebarView",
+          "group": "navigation@4"
+        },
+        {
+          "command": "aiPromptLogger.clearHistory",
+          "when": "view == aiPromptLogger.historySidebarView",
+          "group": "navigation@5"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AI Prompt History Logger",
+      "properties": {
+        "aiPromptLogger.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable automatic prompt logging in the workspace."
+        },
+        "aiPromptLogger.fileName": {
+          "type": "string",
+          "default": ".ai/history.json",
+          "description": "The file name or relative path of the JSON log file in the workspace (default: .ai/history.json)."
+        },
+        "aiPromptLogger.autoGitignore": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically create or update .gitignore to ignore the prompt log file."
+        },
+        "aiPromptLogger.captureMetadata": {
+          "type": "boolean",
+          "default": true,
+          "description": "Capture context such as active file path, selection range, language ID, and Git branch."
+        },
+        "aiPromptLogger.maxEntries": {
+          "type": "number",
+          "default": 1000,
+          "description": "Maximum number of prompt entries to store (older entries are trimmed; set to 0 for unlimited)."
+        },
+        "aiPromptLogger.notifyOnLog": {
+          "type": "boolean",
+          "default": false,
+          "description": "Display a notification message in VS Code whenever a prompt is logged."
+        },
+        "aiPromptLogger.antigravityAutoCapture": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically capture and log prompts sent to Antigravity AI in real time."
+        },
+        "aiPromptLogger.antigravityBrainPath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom path to Antigravity brain directory (leave empty for automatic detection)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "tsc -p ./ --noEmit && node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "build": "node esbuild.js --production",
+    "package": "node esbuild.js --production",
+    "vsix": "npx.cmd @vscode/vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^2.32.0",
+    "esbuild": "^0.23.0",
+    "typescript": "^5.4.5"
+  }
+}
